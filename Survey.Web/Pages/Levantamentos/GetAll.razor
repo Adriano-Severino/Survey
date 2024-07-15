@@ -1,0 +1,70 @@
+﻿@page "/levantamentos"
+@inherits GetAllLevantamentosPage
+
+<MudText Typo="Typo.h3">Gestão de levantamento</MudText>
+<div class="d-flex justify-end">
+    <MudButton Variant="Variant.Filled"
+               Color="Color.Primary"
+               StartIcon="@Icons.Material.TwoTone.Add"
+               Href="/levantamentos/adicionar">
+        NOVO LEVANTAMENTO DE CAMPO
+    </MudButton>
+</div>
+
+@if (Levantamentos == null || Levantamentos.Count() <= 0)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <MudDataGrid Class="mt-4"
+                 Items="@Levantamentos"
+                 Filterable="true">
+        <Columns>
+            <PropertyColumn Property="x => x.Descricao" Title="Descricao" />
+            <TemplateColumn Title="Concluido">
+                <CellTemplate>
+                    @if (context.Item.Concluded)
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Check" Color="Color.Success" />
+                    }
+                    else
+                    {
+                        <MudIconButton Icon="@Icons.Material.Filled.Clear" Color="Color.Error" />
+                    }
+
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Images das luminarias">
+                <CellTemplate>
+                    <MudIconButton Icon="@Icons.Material.Filled.PhotoLibrary" 
+                    Color="Color.Success"
+                                   OnClick="() => OnOpenImagemClickedAsync(context.Item.Id)" />
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Deletar">
+                <CellTemplate>
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                   Color="Color.Error"
+                                   OnClick="() => OnDeleteButtonClickedAsync(context.Item.Id)" />
+                </CellTemplate>
+            </TemplateColumn>
+
+            <TemplateColumn Title="Editar">
+                <CellTemplate>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                   Color="Color.Secondary"
+                                   OnClick="() => OnEditButtonClickedAsync(context.Item.Id)" />
+                </CellTemplate>
+
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+    <br />
+    <br />
+   
+}
+
+<FileDownloadPage></FileDownloadPage>

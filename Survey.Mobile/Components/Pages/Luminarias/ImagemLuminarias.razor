@@ -1,0 +1,27 @@
+﻿@page "/imagems-luminaria/{id:long}"
+
+@inherits ImagemLuminariasPage
+
+<MudCarousel Class="mud-width-full" @ref="_carousel" ItemsSource="@_source" @bind-SelectedIndex="selectedIndex" Style="height:500px;" ShowArrows="@_arrows" ShowBullets="@_bullets" EnableSwipeGesture="@_enableSwipeGesture" AutoCycle="@_autocycle">
+    <ItemTemplate>
+        <MudImage Fluid="true" Src="@context.Imagem" Alt="Imagems da luminaria" Class="rounded-lg" />
+    </ItemTemplate>
+</MudCarousel>
+<MudSwitch @bind-Value="_arrows" Color="MudBlazor.Color.Primary">Mostrar Setas</MudSwitch>
+<MudSwitch @bind-Value="_bullets" Color="MudBlazor.Color.Primary">Mostrar Marcadores</MudSwitch>
+<MudSwitch @bind-Value="_enableSwipeGesture" Color="MudBlazor.Color.Primary">Ativar gesto de troca</MudSwitch>
+<MudSwitch @bind-Value="_autocycle" Color="MudBlazor.Color.Primary">Ciclo Automático (Padrão: 5 secs)</MudSwitch>
+<br />
+
+
+<MudSelect @bind-Value="selectedIndex" Label="@($"Imagem selcionada (item: {selectedIndex})")">
+    @{
+        int index = 0;
+        foreach (var item in _source)
+        {
+            <MudSelectItem Value="@index">@item.Estado.Descricao</MudSelectItem>
+
+            index++;
+        }
+    }
+</MudSelect>

@@ -1,0 +1,21 @@
+﻿@page "/download"
+@using Survey.Core.Handlers
+
+@inject IFileDownload Handler
+
+<MudText Typo="Typo.caption">Download do aplicativo Survey Mobile para Android</MudText>
+<MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="DownloadFileFromURL" Color="Color.Secondary" />
+
+@code {
+    private async Task DownloadFileFromURL()
+    {
+        try
+        {
+           Handler.GetFileAsync("SurveyMobile.apk");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"{ex.Message}");
+        }
+    }
+}

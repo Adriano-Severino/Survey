@@ -1,0 +1,82 @@
+﻿@page "/levantamentos/adicionar"
+@using Survey.Core.Models
+@inherits CreateLevantamentoPage
+
+<MudText Typo="Typo.h3">Novo Levantamento</MudText>
+
+<MudPaper Class="pa-8 mt-4">
+    <EditForm Model="@InputModel" OnValidSubmit="OnValidSubmitAsync">
+        <DataAnnotationsValidator />
+        <MudTextField Label="Descrição do levantamento"
+                      HelperText="Campo obrigatório"
+                      @bind-Value="InputModel.Descricao"
+                      For="@(() => InputModel.Descricao)" />
+        <br />
+        <hr />
+        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="ToggleBlockFieldsBlocos">
+            Adicionar Informação do Blocos ao levantamento
+        </MudButton>
+
+        @if (showBlockFieldsBlocos)
+        {
+            <MudTextField Label="Nome do bloco"
+                          @bind-Value="currentNome"
+                          For="@(() => currentNome)" />
+
+            <MudTextField Label="Descrição do bloco"
+                          @bind-Value="currentDescricao"
+                          For="@(() => currentDescricao)" />
+
+
+            <br />
+            <hr />
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="AddBloco">
+                Adicionar Bloco
+            </MudButton>
+
+            <hr />
+            <br />
+            foreach (var item in InputModel.Bloco)
+            {
+                <MudText Typo="Typo.caption">Nome do Bloco: @item.Nome</MudText>
+                <br />
+                <MudText Typo="Typo.caption">Descrição do Bloco: @item.Descricao</MudText>
+                <hr />
+   
+            }
+
+            <br />
+
+            foreach (var bloco in InputModel.Bloco)
+            {
+                foreach (var item in bloco.Pavimentos)
+                {
+                    <MudText Typo="Typo.caption">Nome do pavimento: @item.Nome</MudText>
+                    <br />
+                    <MudText Typo="Typo.caption">Descrição do pavimento: @item.Descricao</MudText>
+                    <hr />
+                }          
+            }
+         
+        }
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <hr />
+
+        @if (IsBusy)
+        {
+            <MudProgressCircular Indeterminate="true" Color="Color.Primary" />
+        }
+        else
+        {
+            <MudButton ButtonType="ButtonType.Submit"
+                       Variant="Variant.Outlined"
+                       Color="Color.Primary">
+                Salvar
+            </MudButton>
+        }
+    </EditForm>
+</MudPaper>

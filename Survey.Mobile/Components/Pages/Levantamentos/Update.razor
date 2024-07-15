@@ -1,0 +1,121 @@
+﻿@page "/editar/{id:long}"
+
+@inherits UpdateLevantamentoPage
+
+
+<MudText Typo="Typo.h3">Novo Levantamento</MudText>
+
+
+@if (IsBusy)
+{
+    <MudProgressCircular Indeterminate="true" Color="MudBlazor.Color.Primary" />
+}
+else
+{
+
+    <MudPaper Class="pa-8 mt-4">
+        <EditForm Model="@Levantamento" OnValidSubmit="OnValidSubmitAsync">
+            <DataAnnotationsValidator />
+            <MudTextField Label="Descrição do levantamento"
+                          HelperText="Campo obrigatório"
+                          @bind-Value="Levantamento.Descricao"
+                          For="@(() => Levantamento.Descricao)" />
+            <MudSwitch Label="Levantamento concluido" @bind-Value="Levantamento.Concluded" Color="MudBlazor.Color.Primary" />
+
+            <br />
+            <hr />
+            <MudButton Variant="Variant.Text" Color="MudBlazor.Color.Primary" OnClick="ToggleBlockFieldsBlocos">
+                Informação do Blocos
+            </MudButton>
+
+            @if (showBlockFieldsBlocos)
+            {
+
+                foreach (var item in Levantamento.Bloco)
+                {
+                    <MudTextField Label="Nome do bloco"
+                                  @bind-Value="item.Nome"
+                                  For="@(() => item.Nome)" />
+
+                    <MudTextField Label="Descrição do bloco"
+                                  @bind-Value="item.Descricao"
+                                  For="@(() => item.Descricao)" />
+
+                    <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => AddPavimento(item)">
+                        Adicionar Pavimento ao bloco
+                    </MudButton>
+                    <br />
+
+                }
+                <br />
+
+                <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="ToggleBlockFieldsNovoBlocos">
+                    Adicionar novo bloco
+                </MudButton>
+                @if (showBlockFieldsNovoBlocos)
+                {
+
+                    <MudTextField Label="Nome do bloco"
+                                  @bind-Value="currentNome"
+                                  For="@(() => currentNome)" />
+
+                    <MudTextField Label="Descrição do bloco"
+                                  @bind-Value="currentDescricao"
+                                  For="@(() => currentDescricao)" />
+
+                    <br />
+                    <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="AddBloco">
+                        Adicionar Bloco
+                    </MudButton>
+                }
+                <br />
+                <hr />
+                <br />
+
+                <br />
+
+                <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="ToggleBlockFieldsPavimento">
+                    Informação do pavimento
+                </MudButton>
+                <br />
+                <br />
+                @if (showBlockFieldsPagimento)
+                {
+                    @foreach (var bloco in Levantamento.Bloco)
+                    {
+                        foreach (var item in bloco.Pavimentos)
+                        {
+                            <MudTextField Label="Nome do pavimento"
+                                          @bind-Value="item.Nome"
+                                          For="@(() => item.Nome)" />
+
+                            <MudTextField Label="Descrição do pavimento"
+                                          @bind-Value="item.Descricao"
+                                          For="@(() => item.Descricao)" />
+
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => AtualizarPavimento(item)">
+                                Atualizar Pavimento
+                            </MudButton>
+                            <MudButton Variant="Variant.Text" Color="MudBlazor.Color.Primary" OnClick="() => EditarLuminarias(item)">
+                                Editar Informações das luminarias
+                            </MudButton>
+                        }
+
+                    }
+
+
+                    <br />
+                    <br />
+
+                }
+            }
+            <hr />
+            <br />
+            <br />
+
+            <MudButton OnClick="Cancel">Cancelar</MudButton>
+            <MudButton Color="@Color" Variant="Variant.Text" ButtonType="ButtonType.Submit">Comcluir</MudButton>
+
+        </EditForm>
+    </MudPaper>
+}

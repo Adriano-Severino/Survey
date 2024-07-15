@@ -1,0 +1,118 @@
+﻿@using Survey.Core.Enums
+
+@inherits DialogUpdateLuminariaPage
+
+<MudPaper Class="pa-8 mt-4">
+
+    <MudDialog>
+        <DialogContent>
+            <MudText Typo="Typo.h5">Nome do pavimento</MudText>
+            <MudText Typo="Typo.caption">@Pavimento.Nome</MudText>
+
+            <br />
+            <MudText Typo="Typo.h5">Descrição do pavimento</MudText>
+            <MudText Typo="Typo.caption">@Pavimento.Descricao</MudText>
+
+            <br />
+            <hr />
+
+            <br />
+
+            @foreach (var luminaria in Pavimento.Luminarias)
+            {
+                <MudText Typo="Typo.caption">Nome da luminaria: @currentImagem</MudText>
+                <br />
+                <InputFile OnChange="@HandleFileChange" accept=".png,.jpeg,.jpg" />
+
+                <MudTextField Label="Descrição do estado da luminaria"
+                              @bind-Value="luminaria.Estado.Descricao"
+                              For="@(() => luminaria.Estado.Descricao)" />
+                <br />
+
+                @if (!string.IsNullOrWhiteSpace(luminaria.Imagem))
+                {
+                    <img src="@luminaria.Imagem" alt="Imagem" Height="200" />
+                }
+                <br />
+
+                if (luminaria.Estado.EEstadoType == EEstadoType.Funcionando)
+                {
+                    <MudText Color="Color.Success" Typo="Typo.h6">Estado atual: @luminaria.Estado.EEstadoType</MudText>
+                }
+                else
+                {
+                    <MudText Color="Color.Error" Typo="Typo.h6">Estado atual: @luminaria.Estado.EEstadoType</MudText>
+                }
+             
+                <MudSelect @bind-Value="EstadoType" Label="Selecione um Estado da luminaria" AnchorOrigin="Origin.BottomCenter">
+                    @foreach (EEstadoType item in Enum.GetValues(typeof(EEstadoType)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <hr />
+                <br />
+
+                <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => UpdateLuminarias(luminaria)">
+                    Atualizar
+                </MudButton>
+
+                <br />
+                <hr />
+             
+                <br />
+
+                <hr />
+                <br />
+            }
+
+            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="ToggleBlockFieldsBlocos">
+                Adicionar novas luminarias ao pavimento atual
+            </MudButton>
+            <br />
+            @if (showBlockFieldsLumianrias)
+            {
+                <MudText Typo="Typo.caption">Nome da luminaria: @currentImagem</MudText>
+                <br />
+                <InputFile OnChange="@HandleFileChange" accept=".png,.jpeg,.jpg" />
+
+                @if (!string.IsNullOrWhiteSpace(base64Image))
+                {
+                    <img src="@base64Image" alt="Imagem" Height="200" />
+                }
+                <MudTextField Label="Descrição do estado da luminaria"
+                              @bind-Value="currentDescricao"
+                              For="@(() => currentDescricao)" />
+
+
+                <MudSelect @bind-Value="EstadoType" Label="Estado da luminaria" AnchorOrigin="Origin.BottomCenter">
+                    @foreach (EEstadoType item in Enum.GetValues(typeof(EEstadoType)))
+                    {
+                        <MudSelectItem Value="@item">@item</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <hr />
+                <br />
+
+                <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="AddLuminarias">
+                    Adicionar luminarias
+                </MudButton>
+
+
+                <hr />
+                <br />
+
+            }
+            <br />
+            <br />
+        </DialogContent>
+        <DialogActions>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="() => Fechar()">
+                Fechar
+            </MudButton>
+        </DialogActions>
+
+    </MudDialog>
+</MudPaper>
